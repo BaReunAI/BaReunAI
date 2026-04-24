@@ -140,7 +140,7 @@ app.get('/', (c) => {
       <header id="top-nav">
         <nav class="nav-inner">
           <a href="#hero" class="logo">
-            <span class="logo-mark">ResearchAi</span>
+            <span class="logo-mark">바른AI</span>
             <span class="logo-sub">by Dr. Oh</span>
           </a>
           <ul class="nav-links">
@@ -168,7 +168,7 @@ app.get('/', (c) => {
             <h1 class="hero-title">
               <span class="line-1">생성형 AI로</span>
               <span class="line-2">
-                <span class="gradient-text">업무의 미래</span>를 지금
+                <span class="gradient-text">업무의 미래</span> 지금
               </span>
               <span class="line-3">만듭니다.</span>
             </h1>
@@ -253,7 +253,7 @@ app.get('/', (c) => {
               </p>
               <p>
                 강의는 언제나 <strong>현장에서 증명된 사용법</strong>에서 출발합니다.
-                ChatGPT, Claude, Perplexity, GenSpark, 그리고 <strong>바이브 코딩</strong>까지 — 유행이 아닌 <em>업무 성과</em>에 집중합니다.
+                ChatGPT, Claude, Gemini, Perplexity, GenSpark, 그리고 <strong>바이브 코딩</strong>까지 — 유행이 아닌 <em>업무 성과</em>에 집중합니다.
               </p>
               <p>
                 "AI를 배우는 것이 목표가 아닙니다. <br />
@@ -473,13 +473,6 @@ app.get('/', (c) => {
                   </div>
                 </li>
                 <li>
-                  <i class="fas fa-mobile-alt"></i>
-                  <div>
-                    <span class="contact-label">전화</span>
-                    <a href={`tel:${profile.phone.replace(/-/g,'')}`}>{profile.phone}</a>
-                  </div>
-                </li>
-                <li>
                   <i class="fas fa-briefcase"></i>
                   <div>
                     <span class="contact-label">소속</span>
@@ -528,7 +521,7 @@ app.get('/', (c) => {
       <footer class="site-footer">
         <div class="container footer-inner">
           <div class="footer-brand">
-            <div class="logo-mark">ResearchAi</div>
+            <div class="logo-mark">바른AI</div>
             <p>오원석 박사 · 생성형 AI · 바이브 코딩 전문 강사</p>
           </div>
           <div class="footer-links">
