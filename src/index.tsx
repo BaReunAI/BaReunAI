@@ -515,13 +515,6 @@ app.get('/', (c) => {
             <div class="logo-mark">바른AI</div>
             <p>오원석 박사 · 생성형 AI · 바이브 코딩 전문 강사</p>
           </div>
-          <div class="footer-links">
-            <a href="#about">소개</a>
-            <a href="#career">약력</a>
-            <a href="#books">저서</a>
-            <a href="#vibe">바이브 코딩</a>
-            <a href="#contact">문의</a>
-          </div>
           <div class="footer-copy">
             © 2025 Dr. Wonseok Oh · 바른AI. All Rights Reserved.
           </div>
