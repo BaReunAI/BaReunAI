@@ -97,10 +97,17 @@
   const form = document.getElementById('contact-form')
   const status = document.getElementById('form-status')
   if (form) {
+    const submitBtn = form.querySelector('button[type="submit"]')
+    const originalBtnHtml = submitBtn ? submitBtn.innerHTML : ''
+
     form.addEventListener('submit', async (e) => {
       e.preventDefault()
       status.textContent = '전송 중…'
       status.classList.remove('error')
+      if (submitBtn) {
+        submitBtn.disabled = true
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 전송 중…'
+      }
 
       const data = Object.fromEntries(new FormData(form).entries())
       try {
@@ -110,7 +117,7 @@
           body: JSON.stringify(data),
         })
         const out = await res.json()
-        if (out.ok) {
+        if (res.ok && out.ok) {
           status.textContent = '✓ ' + out.message
           form.reset()
         } else {
@@ -120,6 +127,11 @@
       } catch (err) {
         status.textContent = '⚠ 네트워크 오류. 이메일(ResearchAi@naver.com)로 직접 연락 주세요.'
         status.classList.add('error')
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false
+          submitBtn.innerHTML = originalBtnHtml
+        }
       }
     })
   }

@@ -1,7 +1,14 @@
 import { Hono } from 'hono'
 import { renderer } from './renderer'
 
-const app = new Hono()
+// Cloudflare Pages environment bindings (secrets & variables)
+type Bindings = {
+  RESEND_API_KEY?: string
+  CONTACT_TO_EMAIL?: string
+  CONTACT_FROM_EMAIL?: string
+}
+
+const app = new Hono<{ Bindings: Bindings }>()
 
 app.use(renderer)
 
@@ -475,6 +482,9 @@ app.get('/', (c) => {
 
             <form class="contact-form" id="contact-form">
               <h3>빠른 문의 남기기</h3>
+              {/* Honeypot: 봇만 채움 (사용자에게는 숨김) */}
+              <input type="text" name="_hp" tabIndex={-1} autoComplete="off"
+                style="position:absolute;left:-9999px;opacity:0;pointer-events:none;" aria-hidden="true" />
               <div class="form-row">
                 <label>이름
                   <input type="text" name="name" required placeholder="홍길동" />
@@ -525,19 +535,165 @@ app.get('/', (c) => {
 })
 
 // ============================================================
-// API: Contact form (mock — 추후 이메일/DB 연동 가능)
+// API: Contact form → Resend 이메일 발송
 // ============================================================
+
+// Simple HTML escape to prevent injection in email body
+const esc = (s: string) =>
+  String(s ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+
+// Build a futuristic-styled HTML email
+function buildEmailHtml(data: {
+  name: string
+  email: string
+  phone?: string
+  topic?: string
+  message: string
+}) {
+  const now = new Date().toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' })
+  return `<!DOCTYPE html>
+<html lang="ko">
+<head><meta charset="UTF-8"><title>새 강의 문의</title></head>
+<body style="margin:0;padding:0;background:#0b0d1a;font-family:'Apple SD Gothic Neo','Malgun Gothic',sans-serif;color:#e8ecff;">
+  <div style="max-width:620px;margin:0 auto;padding:32px 20px;">
+    <div style="background:linear-gradient(135deg,#8a7cff 0%,#6ee7ff 100%);padding:2px;border-radius:16px;">
+      <div style="background:#101328;border-radius:14px;padding:32px;">
+
+        <div style="margin-bottom:24px;padding-bottom:20px;border-bottom:1px solid rgba(255,255,255,0.1);">
+          <div style="font-size:12px;letter-spacing:3px;color:#6ee7ff;font-weight:600;">BARUN AI · NEW INQUIRY</div>
+          <h1 style="margin:8px 0 0;font-size:24px;color:#fff;">🚀 새로운 강의 문의가 도착했습니다</h1>
+          <div style="margin-top:6px;font-size:13px;color:#a4acd0;">${esc(now)} (KST)</div>
+        </div>
+
+        <table style="width:100%;border-collapse:collapse;font-size:15px;">
+          <tr>
+            <td style="padding:12px 0;color:#a4acd0;width:100px;">이름</td>
+            <td style="padding:12px 0;color:#fff;font-weight:600;">${esc(data.name)}</td>
+          </tr>
+          <tr>
+            <td style="padding:12px 0;color:#a4acd0;border-top:1px solid rgba(255,255,255,0.06);">이메일</td>
+            <td style="padding:12px 0;color:#fff;border-top:1px solid rgba(255,255,255,0.06);">
+              <a href="mailto:${esc(data.email)}" style="color:#6ee7ff;text-decoration:none;">${esc(data.email)}</a>
+            </td>
+          </tr>
+          ${data.phone ? `
+          <tr>
+            <td style="padding:12px 0;color:#a4acd0;border-top:1px solid rgba(255,255,255,0.06);">연락처</td>
+            <td style="padding:12px 0;color:#fff;border-top:1px solid rgba(255,255,255,0.06);">${esc(data.phone)}</td>
+          </tr>` : ''}
+          ${data.topic ? `
+          <tr>
+            <td style="padding:12px 0;color:#a4acd0;border-top:1px solid rgba(255,255,255,0.06);">문의 주제</td>
+            <td style="padding:12px 0;border-top:1px solid rgba(255,255,255,0.06);">
+              <span style="display:inline-block;padding:4px 12px;background:rgba(110,231,255,0.15);color:#6ee7ff;border-radius:999px;font-size:13px;font-weight:600;">${esc(data.topic)}</span>
+            </td>
+          </tr>` : ''}
+        </table>
+
+        <div style="margin-top:24px;padding:20px;background:rgba(255,255,255,0.03);border-left:3px solid #8a7cff;border-radius:8px;">
+          <div style="font-size:12px;color:#a4acd0;letter-spacing:1px;margin-bottom:10px;font-weight:600;">MESSAGE</div>
+          <div style="color:#e8ecff;line-height:1.7;white-space:pre-wrap;word-break:break-word;">${esc(data.message)}</div>
+        </div>
+
+        <div style="margin-top:28px;padding-top:20px;border-top:1px solid rgba(255,255,255,0.1);text-align:center;">
+          <a href="mailto:${esc(data.email)}?subject=${encodeURIComponent('[바른AI] 강의 문의 감사합니다')}"
+             style="display:inline-block;padding:12px 28px;background:linear-gradient(135deg,#8a7cff,#6ee7ff);color:#fff;text-decoration:none;border-radius:999px;font-weight:600;font-size:14px;">
+             ✉️ 바로 답장하기
+          </a>
+        </div>
+
+        <div style="margin-top:24px;text-align:center;font-size:11px;color:#6f789e;">
+          © 2025 바른AI · Dr. Wonseok Oh Landing Page — Sent via Resend
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>`
+}
+
 app.post('/api/contact', async (c) => {
   try {
-    const body = await c.req.json()
-    const { name, email, message } = body
+    const body = await c.req.json<{
+      name?: string
+      email?: string
+      phone?: string
+      topic?: string
+      message?: string
+      _hp?: string // honeypot
+    }>()
+
+    // Honeypot (bot filter)
+    if (body._hp) return c.json({ ok: true, message: '접수되었습니다.' })
+
+    const name = (body.name || '').trim()
+    const email = (body.email || '').trim()
+    const phone = (body.phone || '').trim()
+    const topic = (body.topic || '').trim()
+    const message = (body.message || '').trim()
+
+    // Validation
     if (!name || !email || !message) {
-      return c.json({ ok: false, error: '필수 항목이 비어있습니다.' }, 400)
+      return c.json({ ok: false, error: '이름, 이메일, 메시지는 필수입니다.' }, 400)
     }
-    // TODO: 이메일 전송 또는 KV/D1 저장 연동
-    console.log('[Contact]', body)
-    return c.json({ ok: true, message: '문의가 접수되었습니다. 빠르게 연락드리겠습니다.' })
+    const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRe.test(email)) {
+      return c.json({ ok: false, error: '올바른 이메일 형식이 아닙니다.' }, 400)
+    }
+    if (message.length > 5000) {
+      return c.json({ ok: false, error: '메시지가 너무 깁니다 (최대 5000자).' }, 400)
+    }
+
+    const apiKey = c.env?.RESEND_API_KEY
+    const toEmail = c.env?.CONTACT_TO_EMAIL || 'ResearchAi@naver.com'
+    const fromEmail = c.env?.CONTACT_FROM_EMAIL || '바른AI <onboarding@resend.dev>'
+
+    // Dev fallback: API 키가 없으면 로그만 남기고 성공 처리 (로컬 개발 용)
+    if (!apiKey) {
+      console.log('[Contact] RESEND_API_KEY not set — logging only:', { name, email, phone, topic, message })
+      return c.json({
+        ok: true,
+        message: '문의가 접수되었습니다. (개발 모드: 이메일 미발송)',
+        _dev: true,
+      })
+    }
+
+    // Resend API 호출
+    const res = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        from: fromEmail,
+        to: [toEmail],
+        reply_to: email,
+        subject: `[바른AI 문의] ${name}님 · ${topic || '일반 문의'}`,
+        html: buildEmailHtml({ name, email, phone, topic, message }),
+      }),
+    })
+
+    if (!res.ok) {
+      const errText = await res.text()
+      console.error('[Resend error]', res.status, errText)
+      return c.json(
+        { ok: false, error: '이메일 전송에 실패했습니다. 잠시 후 다시 시도하거나 ResearchAi@naver.com으로 직접 연락 주세요.' },
+        500
+      )
+    }
+
+    return c.json({
+      ok: true,
+      message: '문의가 정상적으로 접수되었습니다. 빠르게 답장드리겠습니다! 🙌',
+    })
   } catch (err) {
+    console.error('[Contact] exception', err)
     return c.json({ ok: false, error: '요청 처리 중 오류가 발생했습니다.' }, 500)
   }
 })
