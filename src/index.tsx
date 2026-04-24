@@ -187,28 +187,19 @@ app.get('/', (c) => {
 
           <div class="hero-visual">
             <div class="profile-frame">
-              <div class="profile-ring"></div>
-              <img src="/static/profile.png" alt="오원석 박사 프로필 사진" class="profile-photo" />
-              <div class="floating-card card-1">
+              <div class="profile-glow"></div>
+              <img src="/static/profile-hero.png" alt="오원석 박사 · 생성형 AI 및 바이브 코딩 전문 강사" class="profile-photo" />
+              <div class="floating-badge badge-1">
                 <i class="fas fa-brain"></i>
-                <div>
-                  <div class="card-title">AI 박사</div>
-                  <div class="card-sub">연세대 생명공학</div>
-                </div>
+                <span>AI 박사</span>
               </div>
-              <div class="floating-card card-2">
+              <div class="floating-badge badge-2">
                 <i class="fas fa-microchip"></i>
-                <div>
-                  <div class="card-title">삼성전자</div>
-                  <div class="card-sub">종합기술원 수석연구원</div>
-                </div>
+                <span>삼성전자 · 수석연구원</span>
               </div>
-              <div class="floating-card card-3">
-                <i class="fas fa-book"></i>
-                <div>
-                  <div class="card-title">저서 2권</div>
-                  <div class="card-sub">미디어북, 2025</div>
-                </div>
+              <div class="floating-badge badge-3">
+                <i class="fas fa-book-open"></i>
+                <span>저서 2권 · 2025</span>
               </div>
             </div>
           </div>
