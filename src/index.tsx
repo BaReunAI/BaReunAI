@@ -476,7 +476,7 @@ app.get('/', (c) => {
                   <i class="fas fa-briefcase"></i>
                   <div>
                     <span class="contact-label">소속</span>
-                    <span>바른AI · 디지털융합교육원 · 전북대 평생교육원</span>
+                    <span>바른AI · 디지털융합교육원</span>
                   </div>
                 </li>
               </ul>
