@@ -77,7 +77,6 @@ const lectures = [
   { org: '국가기술표준원', topic: 'AI활용 보고서 및 보도자료 작성' },
   { org: '한국전력 본사', topic: '생성형AI활용 업무효율화' },
   { org: '지방자치인재개발원', topic: '디지털 소통' },
-  { org: '수자원공사', topic: '생성형 AI 업무 효율화' },
 ]
 
 const vibeCoding = {
@@ -169,9 +168,9 @@ app.get('/', (c) => {
             <h1 class="hero-title">
               <span class="line-1">생성형 AI로</span>
               <span class="line-2">
-                <span class="gradient-text">업무의 미래</span>를
+                <span class="gradient-text">업무의 미래</span>를 지금
               </span>
-              <span class="line-3">지금 만듭니다.</span>
+              <span class="line-3">만듭니다.</span>
             </h1>
             <p class="hero-desc">{profile.description}</p>
             <div class="hero-cta">
@@ -269,7 +268,6 @@ app.get('/', (c) => {
                 <li><i class="fas fa-check-circle"></i> 바이브 코딩 (Vibe Coding) 실전 교육</li>
                 <li><i class="fas fa-check-circle"></i> AI 리터러시 · AX 혁신 조직 강연</li>
                 <li><i class="fas fa-check-circle"></i> 데이터 분석 · 시각화 · 보고서 자동화</li>
-                <li><i class="fas fa-check-circle"></i> AI 활용 신약개발 · R&D 기획</li>
                 <li><i class="fas fa-check-circle"></i> 공공기관·대기업 임직원 대상 맞춤 교육</li>
               </ul>
             </div>
@@ -322,12 +320,6 @@ app.get('/', (c) => {
                 {certifications.map((cert) => (
                   <li><i class="fas fa-medal"></i> {cert}</li>
                 ))}
-              </ul>
-              <h3 style="margin-top: 2rem;"><i class="fas fa-star"></i> 경력 하이라이트</h3>
-              <ul class="cert-list">
-                <li><i class="fas fa-microchip"></i> 삼성전자 종합기술원 수석연구원</li>
-                <li><i class="fas fa-landmark"></i> 식품의약품안전처 5급 공무원</li>
-                <li><i class="fas fa-flask"></i> R&D 연구경력 30여 년</li>
               </ul>
             </div>
           </div>
