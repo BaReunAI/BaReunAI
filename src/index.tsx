@@ -10,6 +10,32 @@ type Bindings = {
 
 const app = new Hono<{ Bindings: Bindings }>()
 
+// SEO: sitemap.xml & robots.txt (must be defined before renderer middleware)
+app.get('/sitemap.xml', (c) => {
+  const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://bareunai.com/</loc>
+    <lastmod>2026-04-25</lastmod>
+    <priority>1.0</priority>
+  </url>
+</urlset>`
+  return new Response(xml, {
+    headers: { 'Content-Type': 'application/xml; charset=utf-8' },
+  })
+})
+
+app.get('/robots.txt', (c) => {
+  const txt = `User-agent: *
+Allow: /
+
+Sitemap: https://bareunai.com/sitemap.xml
+`
+  return new Response(txt, {
+    headers: { 'Content-Type': 'text/plain; charset=utf-8' },
+  })
+})
+
 app.use(renderer)
 
 // ============================================================
