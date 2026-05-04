@@ -782,13 +782,23 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
   position: relative;
 }
 .program-block {
-  margin-top: 64px;
+  margin-top: 80px;
 }
 .program-block:first-of-type { margin-top: 40px; }
 .program-block + .program-block {
-  margin-top: 120px;
-  padding-top: 100px;
-  border-top: 1px dashed rgba(255,255,255,0.08);
+  margin-top: 200px;
+  padding-top: 140px;
+  position: relative;
+}
+.program-block + .program-block::before {
+  content: '';
+  position: absolute;
+  top: 70px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(138, 124, 255, 0.5), transparent);
 }
 .program-head {
   text-align: center;
