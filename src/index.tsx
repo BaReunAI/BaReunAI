@@ -518,7 +518,7 @@ app.get('/', (c) => {
           <div class="vibe-head">
             <div class="vibe-tag">
               <i class="fas fa-wand-magic-sparkles"></i>
-              <span>NEW · 2025 핵심 프로그램</span>
+              <span>NEW · 2026 핵심 프로그램</span>
             </div>
             <h2 class="vibe-title">
               <span class="vibe-title-kr">바이브 코딩</span>
