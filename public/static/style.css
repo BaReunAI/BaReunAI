@@ -776,6 +776,46 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
 }
 .lecture-more i { color: var(--accent); margin-right: 8px; }
 
+/* ============ Programs (업무효율화 + 리터러시) ============ */
+.programs-section {
+  padding: 120px 0;
+  position: relative;
+}
+.program-block {
+  margin-top: 64px;
+}
+.program-block:first-of-type { margin-top: 40px; }
+.program-head {
+  text-align: center;
+  max-width: 760px;
+  margin: 0 auto 40px;
+}
+.program-title {
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  background: var(--gradient-main);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  margin-bottom: 12px;
+}
+.program-subtitle {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 14px;
+}
+.program-desc {
+  font-size: 0.98rem;
+  color: var(--text-dim);
+  line-height: 1.75;
+}
+.program-block + .program-block {
+  padding-top: 60px;
+  border-top: 1px dashed rgba(255,255,255,0.08);
+}
+
 /* ============ Vibe Coding (Featured) ============ */
 .vibe-section {
   padding: 120px 0;
