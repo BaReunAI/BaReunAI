@@ -112,6 +112,46 @@ const lectures = [
   { org: '지방자치인재개발원', topic: '디지털 소통' },
 ]
 
+const aiEfficiency = {
+  title: '생성형 AI 업무 효율화',
+  subtitle: 'AI를 도구가 아닌 동료로 — 일하는 방식을 다시 설계합니다',
+  description:
+    'ChatGPT · Claude · Gemini · Perplexity를 업무 흐름에 체화시키는 실전 프로그램. 보고서·자료조사·이메일·데이터 분석·기획까지, 반복 업무는 자동화하고 사고의 깊이는 끌어올립니다.',
+  pillars: [
+    { icon: 'fa-wand-magic-sparkles', title: '프롬프트 설계 기본기', desc: '결과를 바꾸는 컨텍스트·역할·예시 3축 설계법' },
+    { icon: 'fa-file-lines', title: '보고서·문서 자동화', desc: '초안·요약·교정·보도자료까지 작업 시간 절반 이하로' },
+    { icon: 'fa-chart-column', title: '데이터 분석·시각화', desc: 'CSV·엑셀을 AI에게 던지면 인사이트가 돌아오는 실습' },
+    { icon: 'fa-robot', title: '나만의 업무 GPT', desc: 'GPTs · Projects · Custom Instructions로 전용 비서 제작' },
+  ],
+  curriculum: [
+    { step: '01', title: '내 업무 AI 진단', desc: '하루 업무 흐름 중 AI를 끼워 넣을 지점 찾기 워크샵' },
+    { step: '02', title: '프롬프트 엔지니어링', desc: '결과를 바꾸는 5가지 패턴, 역할·맥락·제약 설계법' },
+    { step: '03', title: '자료조사 · 보고서 자동화', desc: 'Perplexity 리서치, 보고서·보도자료 초안 자동 생성' },
+    { step: '04', title: '데이터 분석 · 차트화', desc: 'AI에게 데이터 던져 인사이트·시각화·요약 도출' },
+    { step: '05', title: '나만의 업무 비서 구축', desc: 'GPTs · Claude Projects로 전담 업무 파트너 만들기' },
+  ],
+}
+
+const aiLiteracy = {
+  title: 'AI 리터러시 · AX 혁신',
+  subtitle: '조직이 AI 시대를 이해하는 출발점',
+  description:
+    '전사 임직원 대상 AI 리터러시 프로그램. AI 기술의 본질·한계·윤리·보안·미래 변화를 균형 있게 다루며, AX(AI Transformation) 관점에서 조직의 변화 방향을 함께 그립니다.',
+  pillars: [
+    { icon: 'fa-lightbulb', title: 'AI 패러다임 이해', desc: '왜 지금이 변곡점인가 — 산업·직무·일상의 재편' },
+    { icon: 'fa-shield-halved', title: '보안 · 윤리 · 저작권', desc: '안전하게 쓰는 사용자 가이드라인과 정보보호 원칙' },
+    { icon: 'fa-diagram-project', title: 'AX 혁신 사례 연구', desc: '국내외 공공·민간의 AI 도입 성공·실패 케이스' },
+    { icon: 'fa-people-group', title: '조직 문화 · 변화관리', desc: '구성원 저항을 줄이는 단계적 도입 전략' },
+  ],
+  curriculum: [
+    { step: '01', title: 'AI 시대의 큰 그림', desc: '생성형 AI가 바꾸는 산업·직무·일상의 지도' },
+    { step: '02', title: '기술의 작동 원리', desc: 'LLM은 어떻게 답을 만드는가 — 환각·한계·신뢰성' },
+    { step: '03', title: 'AI 윤리 · 보안 · 정보보호', desc: '저작권·개인정보·기업 비밀 — 안전하게 쓰는 법' },
+    { step: '04', title: 'AX 혁신 사례 분석', desc: '국내외 공공·민간의 AI 도입 성공·실패 케이스' },
+    { step: '05', title: '우리 조직의 AX 로드맵', desc: '부서별 AI 활용 우선순위와 단계적 도입 전략' },
+  ],
+}
+
 const vibeCoding = {
   title: 'Vibe Coding',
   subtitle: '바이브 코딩 — 코드를 짜지 않고, 아이디어로 앱을 만든다',
@@ -181,6 +221,7 @@ app.get('/', (c) => {
             <li><a href="#career">약력</a></li>
             <li><a href="#books">저서</a></li>
             <li><a href="#lectures">강의이력</a></li>
+            <li><a href="#programs">프로그램</a></li>
             <li><a href="#vibe">바이브 코딩</a></li>
             <li><a href="#contact" class="nav-cta">강의 문의</a></li>
           </ul>
@@ -417,6 +458,56 @@ app.get('/', (c) => {
           <div class="lecture-more">
             <i class="fas fa-ellipsis-h"></i> 외 다수의 기업·기관 출강
           </div>
+        </div>
+      </section>
+
+      {/* =============== Programs (업무효율화 + 리터러시) =============== */}
+      <section id="programs" class="programs-section">
+        <div class="container">
+          <div class="section-head">
+            <span class="section-tag">PROGRAMS</span>
+            <h2 class="section-title">대표 강의 프로그램</h2>
+            <p class="section-sub">
+              업무 효율화 · AI 리터러시 — 조직 단위 도입에 가장 많이 요청되는 두 축의 정규 커리큘럼
+            </p>
+          </div>
+
+          {[aiEfficiency, aiLiteracy].map((prog) => (
+            <article class="program-block">
+              <header class="program-head">
+                <h3 class="program-title">{prog.title}</h3>
+                <p class="program-subtitle">{prog.subtitle}</p>
+                <p class="program-desc">{prog.description}</p>
+              </header>
+
+              <div class="pillars-grid">
+                {prog.pillars.map((p) => (
+                  <article class="pillar-card">
+                    <div class="pillar-icon"><i class={`fas ${p.icon}`}></i></div>
+                    <h3>{p.title}</h3>
+                    <p>{p.desc}</p>
+                  </article>
+                ))}
+              </div>
+
+              <div class="curriculum-block">
+                <h3 class="curriculum-title">
+                  <i class="fas fa-route"></i> 커리큘럼
+                </h3>
+                <ol class="curriculum-list">
+                  {prog.curriculum.map((c) => (
+                    <li class="curriculum-item">
+                      <div class="step-num">{c.step}</div>
+                      <div class="step-body">
+                        <h4>{c.title}</h4>
+                        <p>{c.desc}</p>
+                      </div>
+                    </li>
+                  ))}
+                </ol>
+              </div>
+            </article>
+          ))}
         </div>
       </section>
 
